@@ -17,26 +17,28 @@ Before running the application, make sure you have the following installed:
 
 ## Installation
 
-1. Clone the Repository1:
+1. **Clone the Repository:**
 
-    
-    git clone [<your-repo-url>](https://github.com/RassCrom/landsat_downloader_app.git)
-    cd <your-repo-directory>
-    
+    ```bash
+    git clone https://github.com/RassCrom/landsat_downloader_app.git
+    cd landsat_downloader_app
+    ```
 
     Or download it as a zip file.
 
-2. Install the required Python packages:
+2. **Install the required Python packages:**
 
     You can install the required dependencies using pip. It's recommended to create a virtual environment first:
 
-    
+    ```bash
     python -m venv venv
     venv\Scripts\activate  # On Mac use `source venv/bin/activate`
     pip install -r requirements.txt
-    
+    ```
 
-    
+    The `requirements.txt` file should include the following dependencies:
+
+    ```text
     aiohappyeyeballs==2.4.0
     aiohttp==3.10.5
     aiosignal==1.3.1
@@ -76,20 +78,20 @@ Before running the application, make sure you have the following installed:
     urllib3==2.2.2
     xyzservices==2024.6.0
     yarl==1.9.4
-    
+    ```
 
 ## Running the Application
 
-1. Run the Application:
+1. **Run the Application:**
 
-    
+    ```bash
     python app.py
-    
+    ```
 
     The main GUI window will prompt you to enter your Landsat API credentials. After successful authentication, you can search for Landsat scenes based on various parameters like coordinates, cloud cover, and acquisition dates.
 
-2. Interacting with the Application:
+2. **Interacting with the Application:**
 
-    - Search for Scenes: Enter your search parameters and click "Submit Parameters."
-    - Download Scenes: After displaying search results, select a scene and specify the directory to save the downloaded scene.
-    - Save Metadata: Metadata for the downloaded scenes will be saved to your PostgreSQL database.
+    - **Search for Scenes:** Enter your search parameters and click "Submit Parameters."
+    - **Download Scenes:** After displaying search results, select a scene and specify the directory to save the downloaded scene.
+    - **Save Metadata:** Metadata for the downloaded scenes will be saved to your PostgreSQL database.
