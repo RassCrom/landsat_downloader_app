@@ -95,3 +95,48 @@ Before running the application, make sure you have the following installed:
     - **Search for Scenes:** Enter your search parameters and click "Submit Parameters."
     - **Download Scenes:** After displaying search results, select a scene and specify the directory to save the downloaded scene.
     - **Save Metadata:** Metadata for the downloaded scenes will be saved to your PostgreSQL database.
+
+3. **Setup the PostgreSQL Database:**
+
+   Ensure you have a PostgreSQL instance running. You can connect to a remote PostgreSQL instance using the credentials provided in the code snippet. Modify the connection parameters in the script if needed.
+
+   The database and table for storing the metadata should be set up as follows:
+
+    ```sql
+    CREATE DATABASE [DATABASE NAME];
+
+    \c landsat_scenes_metadata;
+
+    CREATE TABLE scene_data (
+        id SERIAL PRIMARY KEY,
+        display_id TEXT,
+        cloud_cover FLOAT,
+        landsat_scene_id TEXT,
+        acquisition_date TIMESTAMP,
+        collection_number INTEGER,
+        wrs_path INTEGER,
+        wrs_row INTEGER,
+        land_cloud_cover FLOAT,
+        scene_cloud_cover FLOAT,
+        sun_elevation_l0ra FLOAT,
+        sun_azimuth_l0ra FLOAT,
+        data_type TEXT,
+        sensor_id TEXT,
+        satellite TEXT,
+        product_map_projection TEXT,
+        utm_zone INTEGER,
+        datum TEXT,
+        ellipsoid TEXT,
+        scene_center_latitude FLOAT,
+        scene_center_longitude FLOAT,
+        corner_upper_left_latitude FLOAT,
+        corner_upper_left_longitude FLOAT,
+        corner_upper_right_latitude FLOAT,
+        corner_upper_right_longitude FLOAT,
+        corner_lower_left_latitude FLOAT,
+        corner_lower_left_longitude FLOAT,
+        corner_lower_right_latitude FLOAT,
+        corner_lower_right_longitude FLOAT,
+        spatial_coverage FLOAT
+    );
+    ```
