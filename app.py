@@ -1,9 +1,9 @@
-import os
 from landsatxplore.api import API
 
 import PySide6.QtCore
 import sys
 from PySide6 import QtCore, QtWidgets
+from PySide6.QtGui import QIcon
 
 from CredentialWindow import CredentialsWindow
     
@@ -62,6 +62,7 @@ class MyWidget(QtWidgets.QWidget):
         # Create and show the new window with the credentials
         self.credentials_window = CredentialsWindow(username, password)
         self.credentials_window.setWindowTitle("Credentials")
+        self.credentials_window.setWindowIcon(QIcon(r"./resources/cred-icon.png"))
         self.credentials_window.resize(800, 500)
         self.credentials_window.show()
 
