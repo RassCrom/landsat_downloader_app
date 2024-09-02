@@ -156,28 +156,6 @@ class CredentialsWindow(QtWidgets.QWidget):
             print("Failed to search for scenes.")
             print(f"Error: {e}")
 
-    # @QtCore.Slot()
-    # def download_scene(self, sorted_scenes, idx, password, db, user, host, port = 5432, dir = '.\data'):
-    #     chosen_scene = find_object_by_key_value(sorted_scenes, 'display_id', idx)
-    #     output_dir = self.output_dir.text() if self.output_dir.text() else dir
-    #     print(sorted_scenes)
-    #     print(idx)
-    #     print(chosen_scene)
-    #     if chosen_scene:
-    #         metadata_to_database = Database(password, db, user, host, port)
-    #         print('Writing metadata to PSQL')
-    #         metadata_to_database.save_metadata(chosen_scene)
-    #         print('Writing metadata to PSQL finished')
-    #         print('Downloading started')
-    #         # self.ee.download(chosen_scene['display_id'], output_dir=os.path.join(output_dir))
-    #         print('Downloading ended')
-    #         self.logout_ee()
-
-    # @QtCore.Slot()
-    # def logout_ee(self):
-    #     self.ee.logout()
-    #     self.api.logout()
-
     @QtCore.Slot()
     def calculate_indices(self):
         pass
