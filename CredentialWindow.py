@@ -2,7 +2,6 @@ from PySide6 import QtWidgets, QtCore
 from API import API_download
 
 from landsatxplore.api import API
-from landsatxplore.earthexplorer import EarthExplorer
 
 
 class CredentialsWindow(QtWidgets.QWidget):
@@ -50,22 +49,39 @@ class CredentialsWindow(QtWidgets.QWidget):
         self.results = QtWidgets.QLabel(self)
         self.results.setText("No results yet.")
 
-        self.submit_search_params_btn = QtWidgets.QPushButton("Submit Parameters", self)
+        self.submit_search_params_btn = QtWidgets.QPushButton("Search", self)
 
         # Layout configuration
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.addWidget(self.combo_box)
+
         self.layout.addWidget(self.x_coord_input)
         self.layout.addWidget(self.y_coord_input)
+
         self.layout.addWidget(self.start_date_label)
         self.layout.addWidget(self.start_date_input)
+
         self.layout.addWidget(self.end_date_label)
         self.layout.addWidget(self.end_date_input)
+
         self.layout.addWidget(self.cloud_cover_input)
+        
         self.layout.addWidget(self.results)
         self.layout.addWidget(self.submit_search_params_btn)
 
         self.submit_search_params_btn.clicked.connect(self.show_result)
+
+        self.api_logout_btn = QtWidgets.QPushButton("Logout from API", self)
+        self.layout.addWidget(self.api_logout_btn)
+        self.api_logout_btn.clicked.connect(self.logout_api)
+
+    
+    def show_downloader_window(self, user, password, sorted_scenes, available_scenes_list):
+        # Create and show the new window with the db connection
+        self.credentials_window = API_download(user, password, sorted_scenes, available_scenes_list)
+        self.credentials_window.setWindowTitle("Downloader")
+        self.credentials_window.resize(800, 500)
+        self.credentials_window.show()
 
     @QtCore.Slot()
     def show_result(self):
@@ -76,7 +92,7 @@ class CredentialsWindow(QtWidgets.QWidget):
 
         try:
             # Convert inputs to appropriate types
-            cloud_cover = int(self.cloud_cover_input.text()) if self.cloud_cover_input.text() else 100
+            cloud_cover = int(self.cloud_cover_input.text()) or 100
             x_coord = float(self.x_coord_input.text())
             y_coord = float(self.y_coord_input.text())
 
@@ -103,46 +119,7 @@ class CredentialsWindow(QtWidgets.QWidget):
                 self.available_scenes = [scene['display_id'] for scene in sorted_scenes]
                 results_text = "\n".join(self.available_scenes)
                 self.results.setText(f"Scenes found:\n{results_text}")
-
-                download_scene = API_download(self.user_landsat, self.pass_landsat)
-
-                # Clear search params widgets
-                for i in reversed(range(self.layout.count())): 
-                    widget = self.layout.itemAt(i).widget()
-                    if widget:
-                        widget.deleteLater()
-
-                self.scene_to_download_list = QtWidgets.QComboBox(self)
-                self.scene_to_download_list.setPlaceholderText("Choose scene number to download")
-                self.scene_to_download_list.addItems(self.available_scenes)
-                self.layout.addWidget(self.scene_to_download_list)
-
-                self.download = QtWidgets.QPushButton("Download scene", self)
-                self.layout.addWidget(self.download)
-
-                self.output_dir = QtWidgets.QLineEdit(self)
-                self.output_dir.setPlaceholderText("Paste directory path")
-                self.layout.addWidget(self.output_dir)
-
-                self.password_for_db = QtWidgets.QLineEdit(self)
-                self.password_for_db.setPlaceholderText("Password")
-                self.layout.addWidget(self.password_for_db)
-                self.database_for_db = QtWidgets.QLineEdit(self)
-                self.database_for_db.setPlaceholderText("Database")
-                self.layout.addWidget(self.database_for_db)
-                self.user_for_db = QtWidgets.QLineEdit(self)
-                self.user_for_db.setPlaceholderText("User")
-                self.layout.addWidget(self.user_for_db)
-                self.host_for_db = QtWidgets.QLineEdit(self)
-                self.host_for_db.setPlaceholderText("Host")
-                self.layout.addWidget(self.host_for_db)
-                self.port_for_db = QtWidgets.QLineEdit(self)
-                self.port_for_db.setPlaceholderText("Port")
-                self.layout.addWidget(self.port_for_db)
-
-
-                self.download.clicked.connect(lambda: download_scene.download_scene(sorted_scenes, self.scene_to_download_list.currentText(), self.password_for_db.text(), self.database_for_db.text(), self.user_for_db.text(), self.host_for_db.text(), self.port_for_db.text(), self.output_dir.text()))
-
+                self.show_downloader_window(self.user_landsat, self.pass_landsat, sorted_scenes, self.available_scenes)
             else:
                 self.results.setText("No scenes found.")
             
@@ -156,27 +133,9 @@ class CredentialsWindow(QtWidgets.QWidget):
             print("Failed to search for scenes.")
             print(f"Error: {e}")
 
-    # @QtCore.Slot()
-    # def download_scene(self, sorted_scenes, idx, password, db, user, host, port = 5432, dir = '.\data'):
-    #     chosen_scene = find_object_by_key_value(sorted_scenes, 'display_id', idx)
-    #     output_dir = self.output_dir.text() if self.output_dir.text() else dir
-    #     print(sorted_scenes)
-    #     print(idx)
-    #     print(chosen_scene)
-    #     if chosen_scene:
-    #         metadata_to_database = Database(password, db, user, host, port)
-    #         print('Writing metadata to PSQL')
-    #         metadata_to_database.save_metadata(chosen_scene)
-    #         print('Writing metadata to PSQL finished')
-    #         print('Downloading started')
-    #         # self.ee.download(chosen_scene['display_id'], output_dir=os.path.join(output_dir))
-    #         print('Downloading ended')
-    #         self.logout_ee()
-
-    # @QtCore.Slot()
-    # def logout_ee(self):
-    #     self.ee.logout()
-    #     self.api.logout()
+    def logout_api(self):
+        self.api.logout()
+        self.close()
 
     @QtCore.Slot()
     def calculate_indices(self):
