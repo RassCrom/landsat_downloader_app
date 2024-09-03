@@ -19,6 +19,7 @@ class API_download(QtWidgets.QWidget):
         self.pass_api = password
         self.sorted_scenes = sorted_scenes
         self.ee = EarthExplorer(user, password)
+        self.available_scenes_list = available_scenes_list
         self.db_connection = None
 
         self.layout = QtWidgets.QVBoxLayout(self)
@@ -68,9 +69,13 @@ class API_download(QtWidgets.QWidget):
         dir = self.output_dir.text() if self.output_dir.text() else './data'
         chosen_scene = find_object_by_key_value(self.sorted_scenes, 'display_id', idx)
         # output_dir = self.output_dir.text() if self.output_dir.text() else dir
-        print(self.sorted_scenes)
-        print(idx)
-        print(chosen_scene)
+        # print(self.sorted_scenes)
+        # print(idx)
+        # print(chosen_scene)
+        if idx not in self.available_scenes_list:
+            QtWidgets.QMessageBox.information(self, "Info", "Scene has not been chosen!")
+            return
+
         if chosen_scene:
             if not os.path.exists(dir):
                 os.makedirs(dir)
@@ -91,7 +96,7 @@ class API_download(QtWidgets.QWidget):
                 if self.db_connection:
                     metadata_to_database.save_metadata(self.db_connection, chosen_scene)
                 else:
-                    QtWidgets.QMessageBox.information(self, "Info", "Metadata is not saved to database (Metadata saving option is not checked or connection Error).")
+                    QtWidgets.QMessageBox.information(self, "Info", "Metadata is not saved to database (No connection to database).")
             except Exception as e:
                 print(f"Error during download: {e}")
                 return

@@ -92,7 +92,7 @@ class CredentialsWindow(QtWidgets.QWidget):
 
         try:
             # Convert inputs to appropriate types
-            cloud_cover = int(self.cloud_cover_input.text()) or 12
+            cloud_cover = int(self.cloud_cover_input.text()) or 100
             x_coord = float(self.x_coord_input.text())
             y_coord = float(self.y_coord_input.text())
 
@@ -104,8 +104,8 @@ class CredentialsWindow(QtWidgets.QWidget):
             # Perform the search
             scenes = self.api.search(
                 dataset=dataset,
-                latitude=y_coord or 60,
-                longitude=x_coord or 40,
+                latitude=y_coord,
+                longitude=x_coord,
                 start_date=start_date,
                 end_date=end_date,
                 max_cloud_cover=cloud_cover,

@@ -8,7 +8,7 @@ from PySide6.QtGui import QIcon
 from CredentialWindow import CredentialsWindow
     
 
-print(PySide6.QtCore.__version__)
+# print(PySide6.QtCore.__version__)
 
 
 class MyWidget(QtWidgets.QWidget):
@@ -42,15 +42,12 @@ class MyWidget(QtWidgets.QWidget):
         self.saved_user = self.username.text()
         self.saved_pass = self.password.text()
         
-        # Call check_credentials with the entered username and password
         self.check_credentials(self.saved_user, self.saved_pass)
 
     @QtCore.Slot()
     def check_credentials(self, username, password):
         try:
-            # Attempt to initialize the API with the given credentials
             api = API(username, password)
-            # If successful, show a new window with the credentials
             self.show_credentials_window(username, password)
             # Close the current window
             self.close()

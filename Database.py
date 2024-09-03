@@ -62,7 +62,7 @@ class Database(QtWidgets.QWidget):
                 user=self.user_for_db.text(),
                 host=self.host_for_db.text(),
                 password=self.password_for_db.text(),
-                port=int(self.port_for_db.text()) or int(5432)
+                port=int(self.port_for_db.text())  # Add default state
             )
             
             QtWidgets.QMessageBox.information(self, "Success", "Connected to the database successfully.")
