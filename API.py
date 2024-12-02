@@ -83,8 +83,8 @@ class API_download(QtWidgets.QWidget):
             metadata_to_database = Database()
             print('Downloading started')
             try:
-                # self.ee.download(chosen_scene['display_id'], output_dir=os.path.join(dir))
-                pass
+                self.ee.download(chosen_scene['display_id'], output_dir=os.path.join(dir))
+                # pass
             except Exception as e:
                 print(f"Error during download: {e}")
                 return
